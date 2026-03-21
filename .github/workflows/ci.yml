@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend-lint-test:
+    name: Backend — Lint & Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: test_moderation
+          POSTGRES_USER: moderator
+          POSTGRES_PASSWORD: password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Download NLTK data
+        run: python -c "import nltk; nltk.download('stopwords'); nltk.download('punkt')"
+
+      - name: Lint (flake8)
+        run: |
+          cd backend
+          flake8 . --max-line-length=100 --exclude=ml/artifacts,__pycache__,tests
+
+      - name: Run tests
+        env:
+          DATABASE_URL: postgresql://moderator:password@localhost:5432/test_moderation
+          MODEL_TYPE: baseline
+          FLASK_ENV: testing
+        run: |
+          cd backend
+          pytest tests/ -v --tb=short
+
+  frontend-build:
+    name: Frontend — Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install & Build
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+
+  docker-build:
+    name: Docker — Build Check
+    runs-on: ubuntu-latest
+    needs: [backend-lint-test, frontend-build]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backend image
+        run: docker build ./backend -t guardai-backend:test
+
+      - name: Build frontend image
+        run: docker build ./frontend -t guardai-frontend:test
