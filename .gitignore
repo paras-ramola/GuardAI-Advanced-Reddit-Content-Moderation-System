@@ -3,7 +3,6 @@ backend/__pycache__/
 frontend/node_modules/
 frontend/dist/
 .DS_Store
-*.csv
 .env
 /venv
 backend/ml/artifacts/
