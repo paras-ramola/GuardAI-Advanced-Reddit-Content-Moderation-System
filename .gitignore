@@ -5,4 +5,4 @@ frontend/dist/
 .DS_Store
 .env
 /venv
-backend/ml/artifacts/
+
