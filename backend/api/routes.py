@@ -1,8 +1,3 @@
-"""
-Flask route blueprints — v2 (offline Reddit dataset, no PRAW).
-
-All Reddit content is served from PostgreSQL, pre-loaded from the 1.9M row CSV.
-"""
 import logging
 from functools import lru_cache
 from flask import Blueprint, jsonify, request

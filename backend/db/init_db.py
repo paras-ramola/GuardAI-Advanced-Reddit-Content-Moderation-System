@@ -1,7 +1,4 @@
-"""
-Database initialization script — creates tables from schema.sql.
-Run: python -m db.init_db
-"""
+
 import os
 import sys
 import logging
@@ -46,15 +43,11 @@ def init_db():
 
         # Check if we need to auto-load data
         cursor.execute("SELECT COUNT(1) FROM content")
-        if cursor.fetchone()[0] == 0:
-            logger.info("Database is completely empty. Auto-loading offline dataset...")
-            from data.load_reddit_csv import load_csv
-            csv_path = Path(__file__).resolve().parent.parent.parent / "reddit_data.csv"
-            if csv_path.exists():
-                logger.info(f"Adding All rows from {csv_path.name} to the database")
-                load_csv(str(csv_path))
-            else:
-                logger.warning(f"Could not auto-load data: {csv_path} not found.")
+        count = cursor.fetchone()[0]
+
+        if count == 0:
+            logger.info("Database initialized successfully.")
+    
 
         cursor.close()
         conn.close()

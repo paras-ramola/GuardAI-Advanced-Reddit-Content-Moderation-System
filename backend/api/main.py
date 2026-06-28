@@ -1,14 +1,4 @@
-"""
-Flask REST API — Content Moderation System
 
-Endpoints:
-  GET  /health                    — liveness probe
-  GET  /analyze/reddit            — fetch subreddit + run model + store in DB
-  POST /predict                   — predict a single text
-  POST /predict/batch             — predict up to 500 texts
-  GET  /results                   — paginated stored predictions
-  GET  /analytics                 — aggregated stats
-"""
 import os
 import sys
 import json

@@ -1,6 +1,4 @@
-"""
-SQLAlchemy ORM models — v2 (offline Reddit dataset, BIGSERIAL IDs).
-"""
+
 import os
 from sqlalchemy import (
     create_engine, Column, BigInteger, Integer, String, Float,

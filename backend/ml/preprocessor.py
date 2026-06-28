@@ -1,7 +1,4 @@
-"""
-Text preprocessor for the content moderation ML pipeline.
-Cleans social media text: removes handles, URLs, punctuation, short words, then stems.
-"""
+
 import re
 import string
 import logging

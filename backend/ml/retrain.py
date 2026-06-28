@@ -1,7 +1,4 @@
-"""
-ML retraining script — Active Learning pipeline
-Run: python -m ml.retrain
-"""
+
 import os
 import sys
 import logging

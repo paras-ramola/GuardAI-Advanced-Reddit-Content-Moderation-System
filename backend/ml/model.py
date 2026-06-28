@@ -1,10 +1,4 @@
-"""
-ContentModerationModel — inference class for the DistilBERT fine-tuned model.
 
-Usage:
-    model = ContentModerationModel()
-    result = model.predict("These people are idiots")
-"""
 import os
 import logging
 from pathlib import Path
