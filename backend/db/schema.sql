@@ -1,5 +1,3 @@
--- Reddit Content Moderation System — Database Schema (v2, offline dataset)
--- Run: python -m db.init_db
 
 -- ─── Main content table ─────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS content (
